@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+	*{
+		padding: 0;
+		margin: 0;
+	}
+	html,body{
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		/*background-color: #020215;*/
+	}
+
+	</style>
+</head>
+	<body>
+		<canvas id="Mycanvas"></canvas>
+	</body>
+	<script>
+	var wh,ww,context,can;
+	var lizi=[];//例子对象数组;
+	var num=400;//例子个数；
+	var minDis=50;
+	var d_mouse=100;
+	var ari=[];
+
+		window.requestAnimFrame=(function(){
+			return window.requestAnimFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame||window.mozRequstAnimationFrame ||
+				function( callback ) {
+						window.setTimeout( callback, 1000 / 60 );
+				};
+		})()
+		function drambg(ctx){
+			ctx.fillStyle="#020215";
+			ctx.beginPath()
+			ctx.fillRect(0,0,ww,wh);
+			//ctx.closePath()
+			ctx.save();
+			
+		};
+		function Color(){//随机颜色
+			this.r=Math.round(Math.random()*255);
+			this.g=Math.round(Math.random()*255);
+			this.b=Math.round(Math.random()*255);
+			this.rgb="rgba("+this.r+","+this.g+","+this.b+",1)";
+		}
+		function getli(){
+			for(var i=0;i<num;i++){
+				var obj={
+					color:new Color().rgb,
+					x:Math.round(Math.random()*ww),
+					y:Math.round(Math.random()*wh),
+						//速度(不同方向)
+    				vx:(Math.random()-0.5)*3,
+     				vy:(Math.random()-0.5)*3,
+     				r:Math.round(Math.random()*10)
+     				
+				};
+				
+				lizi.push(obj);
+				ari.push(obj.r);
+			}
+		
+			
+		};
+		function Circle(x,y,r,vx,vy,color){
+			this.x=x;
+			this.y=y;
+			this.r=r;
+			this.vx=vx;
+			this.vy=vy;
+			this.color=color;
+		}
+		function dramLi(ctx){
+			drambg(ctx);
+			for(var i=0; i<num;i++){
+				var li=lizi[i];
+				var circle = new Circle(li.x,li.y,li.r,li.vx,li.xy,li.color);
+				ctx.fillStyle=circle.color;
+				ctx.beginPath();
+				//console.log(circle.color)
+				ctx.arc(circle.x,circle.y,circle.r,0,2*Math.PI);
+				ctx.closePath()
+				ctx.fill();
+				//ctx.closePath()
+				
+			}
+		};
+		function moveLI(){//控制速度
+			for(var i=0;i<num;i++){
+				var li=lizi[i];
+				if(li.x<0 ||li.x>ww){
+					li.vx=-li.vx;
+				};
+				if(li.y<0|| li.y>wh){
+					li.vy=-li.vy;
+				}
+				li.x+=li.vx;
+				li.y+=li.vy;
+			}
+		};
+		function connetLIne(){//画线条
+			function getColor(o1,o2){
+					return "rgba("+Math.round(Math.random()*255)+","+Math.round(Math.random()*255)+","+Math.round(Math.random()*255)+",1)"
+			};
+			for(var i=0;i<num;i++){
+				for(var j=0;j<num;j++){
+					var obj1=lizi[i];
+					var obj2=lizi[j];
+					var color=getColor(obj1,obj2);
+					if(Math.abs(obj1.x-obj2.x)<minDis && Math.abs(obj1.y-obj2.y)<minDis){
+						context.lineWidth=0.2;
+						context.strokeStyle=color;
+						context.beginPath();
+						context.moveTo(obj1.x,obj1.y);
+						context.lineTo(obj2.x,obj2.y);
+						//context.closePath();
+						context.stroke();
+					}
+				}
+			}
+		};
+
+		window.onload=function(){
+			 can =document.getElementById("Mycanvas");
+				 ww=window.innerWidth;
+				 wh=window.innerHeight;
+				 can.width=ww;
+				 can.height=wh;
+				 context=can.getContext("2d");
+				 drambg(context);//绘制背景
+				 	getli();//插入粒子对象；
+				 	connetLIne()//链接粒子的线
+					interval();//定时器
+		can.onmousemove=function(ev){
+	     	var ev=window.event || ev;
+	     	var pX=ev.pageX;
+	     	var pY=ev.pageY;   
+	     	
+    	   for(var b=0;b<num;b++){  
+	     		if(Math.abs(lizi[b].x-pX)<d_mouse && Math.abs(lizi[b].y-pY)<d_mouse){
+	     		var c=ari[b]*3;
+	     		//console.log(ari[b])
+	     		lizi[b].r=c;
+	     		
+	     	}else{
+		     	lizi[b].r=ari[b]
+	     	}
+	     }
+	
+	    };
+				
+				
+				function interval(){
+					context.clearRect(0,0,ww,wh);
+					moveLI()
+					dramLi(context);//画粒子
+					connetLIne()
+					requestAnimationFrame(interval)
+				}
+				
+		
+			
+		}
+	</script>
+</html>
