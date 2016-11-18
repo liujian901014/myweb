@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html onselectstart="return false">
+	<head>
+		<meta charset="UTF-8">
+		<title>旋转图片</title>
+		<style>
+			*{margin: 0; padding: 0;}
+			html,body{ height: 100%; background: black; overflow: hidden;}
+			img{display: block; border: none;}
+			
+			.warpImg{
+					transform-origin：50% 50% 50%;
+					position:relative;
+					 width: 150px;
+					 height: 170px;
+			 		 margin:150px auto;
+			 		perspective:auto;
+			 		 transform-style:preserve-3d ; 
+			 		 -webkit-transform-style:preserve-3d ;
+			  		 transform:perspective(800px) rotateY(0deg) rotateX(-15deg);
+			  		 transition:all 1s;
+			  		}
+			.warpImg img{position: absolute; 
+			
+			width: 100%; height:100%;
+			border-radius:3px;
+			box-shadow: 0 0 5px #fff;
+			-webkit-box-reflect: below 8px -webkit-linear-gradient(top, rgba(0,0,0,0) 30%, rgba(0,0,0,.7) 100%); 
+			  
+			   }
+		</style>
+		<script>
+			window.onload=function(){
+				var x,y,x_,y_,xn,yn;
+				var time;
+				var isr;
+				var rox=-15;
+				var roy=0;
+				var owarp=document.getElementById("warpImg");
+				var img=document.getElementsByTagName("img");
+				var du=360/img.length;
+				for(var i=0; i<img.length;i++){
+					img[i].style.transform="rotateY("+du*i+"deg) translateZ(350px)" ;
+					img[i].ondragstart=function(){
+						return false
+					}
+				}
+				function autoro(){
+					
+					time=setInterval(function(){
+						roy+=du;
+						owarp.style.transform="perspective(800px)  rotateX("+rox+"deg)  rotateY("+roy+"deg)"
+					},2000)
+					
+				};
+				autoro()
+				document.onmousedown=function(ev){
+						ev= ev || window.event;
+						x_=ev.clientX;
+						y_=ev.clientY;
+						clearTimeout(isr)
+						clearInterval(time);
+				this.onmousemove=function(ev){
+						clearInterval(time);
+						ev= ev || window.event;
+						x=ev.clientX;
+						y=ev.clientY;
+						xn=x-x_;
+						yn=y-y_;
+						roy+=xn*0.2;
+						
+						
+						rox-=yn*0.1;
+					owarp.style.transform="perspective(800px)  rotateX("+rox+"deg) rotateY("+roy+"deg)"
+						var odiv=document.createElement("div");
+						odiv.style.cssText="width:5px;height:5px;background:#f00; position:fixed; left:"+x+"px; top:"+y+"px;"
+						//this.body.appendChild(odiv);
+						
+						x_=ev.clientX;
+						y_=ev.clientY;
+					};
+					this.onmouseup=function(){
+						
+						this.onmousemove=null;
+						isr=setTimeout(function(){
+							autoro();
+						
+						
+						},3000)
+						
+					};
+				}
+			}
+		</script>
+	</head>
+	<body>
+		
+			<div class="warpImg" id="warpImg">
+				    <img src="img/001.jpg">
+					<img src="img/002.jpg">
+					<img src="img/003.jpg">
+					<img src="img/004.jpg">
+					<img src="img/005.jpg">
+					<img src="img/006.jpg">
+			</div>
+			
+			
+		
+	</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>图片粉碎</title>
+		<style>
+			*{ margin: 0; padding: 0;}
+			body{font-size: 16px; font-family: "微软雅黑";  overflow: hidden;}
+			img{display: block; border: none;}
+			a{text-decoration: none; cursor: pointer;}
+			.btn_a{display: inline-block; width: 100px; text-align: center; background-color: cornflowerblue; color: #fff; line-height: 40px; height: 40px; border-radius: 3px;}
+			.fs_img{width:100%; height: 400px;  position:relative ;  overflow: hidden;}
+			.fs_img div{display: block;background-image:url(img/12.jpg); position: absolute;no-repeat;left: 0px;top: 0px;}
+			#fs_img.set div{ opacity: 1!important;
+				border-radius:0 !important;
+				transform:perspective(800px) translate3d(0px,0px,0px) rotate(0deg) scale(1)!important;
+				-moz-transform:perspective(800px) translate3d(0px,0px,0px) rotate(0deg) scale(1)!important;
+				-webkit-transform:perspective(800px) translate3d(0px,0px,0px) rotate(0deg) scale(1)!important;
+			}
+			.list_btn{position:absolute ; bottom: 10px; width: 200px; left:50%; margin-left:-100px; text-align: center;z-index:9999999;}
+			.list_btn li{ width: 20px; height: 20px; cursor: pointer; display: inline-block; background-color: royalblue; border-radius: 10px;  margin:0 5px ;}
+			.list_btn li.activebtn{background-color:#fff!important;}
+		</style>
+		<script>
+		 window.onload=function(){
+		 	var fs_img =document.querySelector("#fs_img");
+		 	var btn =document.querySelector("#btn_a");
+		 	var ul=document.getElementById("list_btn");
+		 	var c=40,r=20; 
+		 	var timer;
+		 	var w=fs_img.offsetWidth/c;
+		 	var h=fs_img.offsetHeight/r;
+		 	var aImg=["img/12.jpg","img/13.jpg","img/14.jpg"];
+		 	var currenImgIdenx=0;
+		 	var adiv=fs_img.getElementsByTagName("div");
+		 	function cretli(){
+		 		for(var i=0; i<aImg.length;i++){
+		 			var li=document.createElement("li");
+		 			li.setAttribute("pid",i)
+		 			if(i==0){
+		 				addClass(li,"activebtn")
+		 			}
+		 			ul.appendChild(li);
+		 			ul.onclick=function(ev){
+		 				clearInterval(timer);
+		 				var target = ev.target || ev.srcElement;
+		 				if(target.nodeName.toLowerCase() == "li"){
+		 					var index=target.getAttribute("pid");
+		 					for(var m=0;m<ul.getElementsByTagName("li").length;m++){
+		 						if(m==index){
+		 							currenImgIdenx=index;
+		 							addClass(ul.getElementsByTagName("li")[index],"activebtn");
+		 							if(hasClass(fs_img,"set")){
+					    				removeClass(fs_img,"set");
+					    				for(var b=0;b<adiv.length;b++){
+					    					adiv[b].style.backgroundImage="url("+aImg[currenImgIdenx]+")";
+					    						
+					    					}
+					    				setTimeout(function(){
+					    					addClass(fs_img,"set");
+					    					timeTT();
+					    					
+					    				},1000)
+					    				
+					    			}else{
+					    				addClass(fs_img,"set");
+					    				timeTT();
+					    			}
+		 							
+		 						}else{
+		 							removeClass(ul.getElementsByTagName("li")[m],"activebtn")
+		 						}
+		 					}
+		 				}
+		 			}
+
+		 		}
+		 		
+		 	};
+		 	cretli();
+		 	function removeClass(obj, cls) {  
+			    if (hasClass(obj, cls)) {  
+			        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');  
+			        obj.className = obj.className.replace(reg, ' ');  
+			    }  
+			} ;
+			function hasClass(obj, cls) {  
+   			 	return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));  
+			} ;
+			function addClass(obj, cls) {  
+			    if (!hasClass(obj, cls)) obj.className += " " + cls;  
+			};
+			function Random(start,end){    
+    			return Math.random()*(end-start)+start;    
+			}
+		
+
+		 	for(var i=0; i<40;i++){
+		 		for(var j=0;j<20;j++){
+		 			var _div=document.createElement("div")
+		 			var _left=w*i;
+		 			var _top=h*j;
+		 			_div.style.cssText="width:"+Math.ceil(w)+"px;height:"+h+"px;left:"+_left+"px;top:"+_top+"px;opacity:0;background-position:"+ (-_left)+'px ' + (-_top) + 'px; background-size:'+fs_img.offsetWidth+"px "+400+"px"; 
+		 			_div.style.transition = 'all 1s  ease'; 
+		 			_div.style.transform='perspective(800px) translate3d('+Random(-200,200)+'px, '+Random(-200,200)+'px,300px) rotate('+Random(-90,90)+'deg) scale('+ Random(0,2) +')'
+	 				_div.style.borderRadius=Random(w/3,w/2)+"px";
+		 			fs_img.appendChild(_div);
+		 		}
+		 	}
+		 	
+		 	function timeTT(){
+		 		timer=setInterval(function(){
+		 		currenImgIdenx++;
+    			if(hasClass(fs_img,"set")){
+    				removeClass(fs_img,"set");
+    				for(var b=0;b<adiv.length;b++){
+    						if(currenImgIdenx<aImg.length){
+    							adiv[b].style.backgroundImage="url("+aImg[currenImgIdenx]+")";
+    							var ali=ul.getElementsByTagName("li");
+    							for(var n=0;n<ali.length;n++){
+    								if(n==currenImgIdenx){
+    									addClass(ali[currenImgIdenx],"activebtn")
+    								}else{
+    									removeClass(ali[n],"activebtn")
+    								}
+    							}
+    						
+    						}else{
+    							currenImgIdenx=0;
+    							adiv[b].style.backgroundImage="url("+aImg[currenImgIdenx]+")";
+    						}
+    					
+    				}
+    				setTimeout(function(){
+    					addClass(fs_img,"set")
+    				},1000)
+    				
+    			}else{
+    				addClass(fs_img,"set")
+    			}
+		 		
+		 	},3000)
+		 		
+		 	}
+		 	timeTT();
+	
+
+		 }
+		</script>
+	</head>
+	<body>
+	
+		<div class="fs_img set" id="fs_img">
+			<ul class="list_btn" id="list_btn">
+			</ul>
+			
+		</div>
+		<!--<a  class="btn_a" id="btn_a">切换图片</a>-->
+	</body>
+</html>

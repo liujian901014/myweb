@@ -1,0 +1,35 @@
+{
+  "name": "liujianweb",
+  "version": "1.0.0",
+  "description": "刘建网站",
+  "main":"app.js",
+  "scripts": {
+    "dev": "webpack-dev-server --inline -quiet --config build/webpack.config.js --host 0.0.0.0 --port 8809",
+    "build": "webpack --progress --hide-modules --config build/webpack.config.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.11.4",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-3": "^6.11.0",
+    "babel-runtime": "^6.9.2",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.9.0",
+    "html-loader": "^0.4.3",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "vue-html-loader": "^1.2.3",
+    "vue-loader": "^8.5.3",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "vue": "^1.0.26",
+    "vue-resource": "^0.9.3",
+    "vue-router": "^0.7.13"
+  }
+}
