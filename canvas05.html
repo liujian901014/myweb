@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scrolling Backgrounds</title>
+ <style> 
+  body {
+   background: #dddddd;
+  }
+  #canvas {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    background: #ffffff;
+    cursor: crosshair;
+    margin-left: 0px;
+    margin-top: 0px;
+    -webkit-box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+    -moz-box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+  }
+
+  input {
+   margin-left: 15px;
+  }
+</style>
+</head>
+<body>
+ <canvas id='canvas'> Canvas not supported </canvas>
+<script >
+var img=new Image;
+	img.src="sky.png";
+	img.width="100%";
+	var cavans=document.getElementById("canvas");
+	var context =cavans.getContext('2d');
+	var c_width=window.innerWidth;
+
+	var c_height=window.innerHeight;
+	var skyOffset=0;
+	var SKY_VELOCITY=30;
+	var fps=0;
+	var lastTime=0;
+	var paused=true;
+	
+	
+	function dream(){
+		  // context.save();
+		   skyOffset = skyOffset < c_width ? skyOffset +3: 0;
+		   context.save();
+		   console.log(skyOffset)
+		   context.translate(-skyOffset, 0);
+		   context.drawImage(img, 0, 0);
+		   context.drawImage(img, img.width, 0);
+		   context.restore();
+		
+		}
+	function erase() {
+ 			context.clearRect(0,0,c_width,c_height);
+		 }
+	 function calculateFps(now) {
+	 	//console.log(now-lastTime)
+	 	var fps = 1000/ (now - lastTime);
+	 	
+		   lastTime = now;
+		   return fps; 
+		 }
+ function animate(now) {
+   if (now === undefined) {
+  		now = +new Date;
+  		 }
+  	 fps = calculateFps(now);
+   	erase();
+	dream();
+   setTimeout(animate,100);
+ }
+	
+	img.onload=function(){
+		dream();	
+	}
+  setTimeout(animate,100);
+  	
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>烟花效果</title>
+		<style>
+				
+			body{background: black;overflow: hidden;}
+			div{position: absolute;}
+
+		</style>
+		<script>
+		
+			window.onload=function(){
+			
+				
+			}
+			var timer;
+			var sDiv;
+			var num=100;
+			
+		
+			
+			document.onclick=function(event){
+				var oeven= event || window.event;
+				var l=oeven.clientX;
+				var t=oeven.clientY;
+				var oDiv=document.createElement("div");
+					oDiv.style.width=2+"px";
+					oDiv.style.height=35+"px"
+					oDiv.style.position="absolute";
+					oDiv.style.backgroundColor=rgb();
+					document.body.appendChild(oDiv);
+					oDiv.style.left=l+"px";
+					oDiv.style.top=document.documentElement.clientHeight+'px';
+					timer=setInterval(function(){
+						oDiv.style.top = oDiv.offsetTop-50+'px';
+						if(oDiv.offsetTop<t){
+							clearInterval(timer);
+							document.body.removeChild(oDiv);
+							var aDiv=[];
+							for(var i=0;i<num;i++){
+									sDiv=document.createElement("div");
+									sDiv.style.width=2+"px";
+									sDiv.style.height=2+"px";
+									sDiv.style.borderRadius=2+"px";
+									sDiv.style.backgroundColor=rgb();
+									sDiv.style.position="absolute";
+									sDiv.style.left=l+'px';
+									sDiv.style.top=t+'px';
+									sDiv.speedX =Math.random()*25-10;//添加一个x轴的速度
+									sDiv.speedY =Math.random()*25-10;//添加一个y轴的速度
+									document.body.appendChild(sDiv);
+									aDiv.push(sDiv);
+							}
+						var small =setInterval(function(){
+							var count=50;
+							for(var i=0;i<aDiv.length;i++){
+								
+								if(!aDiv[i])continue;
+								aDiv[i].style.left=aDiv[i].offsetLeft+aDiv[i].speedX+'px';
+								aDiv[i].style.top=aDiv[i].offsetTop+aDiv[i].speedY+'px';
+								aDiv[i].speedY++;
+								var winWidth = document.documentElement.clientWidth || document.body.clientWidth;
+								var winHeight = document.documentElement.clientHeight || document.body.clientHeight;
+								if(aDiv[i].offsetLeft<0 ||aDiv[i].offsetLeft>winWidth || aDiv[i].offsetTop>winHeight){
+										document.body.removeChild(aDiv[i]);
+										aDiv[i]=null;
+										count--;
+								}
+								//count++;
+							}
+								
+							if(count==0){
+								clearInterval(small);
+							}
+					
+						},60)
+						
+							
+						}
+					},30)
+			}
+			function rgb(){
+				var r = Math.ceil(Math.random()*255);
+				var g=Math.ceil(Math.random()*255);
+				var b= Math.ceil(Math.random()*255);
+				var color='rgb('+r+','+g+','+b+')';
+				return color;
+			}
+		</script>
+	</head>
+	<body>
+		
+	</body>
+</html>
