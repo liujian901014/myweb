@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>vivo Banaer</title>
+		<style>
+			*{ margin: 0; padding: 0;}
+			body{
+				font-size: 80px;
+				font-family: "微软雅黑";
+				background: #d9d9d9;
+				box-sizing: border-box;
+				text-align: center;
+				line-height: 280px;
+			}
+			.v_box{ height:280px; position: relative;  padding: 10px; perspective:1500px; margin-top:50px ;}
+			.v_content {height: 100%;  width: 90%; overflow: hidden; background-color: #6495ED; margin: 0 auto;  color: #d9d9d9;   transform-origin: 50% 50% 0; border-radius: 20px;}
+			
+		</style>
+		<script>
+			window.onload=function(){
+					var _load={
+						"fudu":8,
+						"v_h":document.querySelector(".v_content").clientHeight/2,
+						"v_w":document.querySelector(".v_content").clientWidth/2,
+						"m_left":0,
+						"m_top":0
+					};
+				setVivo(document.querySelector(".v_content"));
+				function setVivo(obj){
+					obj.onmouseover=function(){
+						obj.style.transition="none";
+						obj.onmousemove=function(event){
+							var event=event || window.event;
+							_load.m_left=event.offsetX;
+							_load.m_top=event.offsetY;
+							var _y=(1-(_load.m_left/_load.v_w))*_load.fudu;
+							var _x=(1-(_load.m_top/_load.v_h))*_load.fudu;
+							console.log(_y)
+							var transform = "rotateX(" +_x + "deg) rotateY(" +-_y+ "deg)";  //变换效果
+          					obj.style.transform = transform;
+          					obj.style.boxShadow = -parseInt(_y * 4) + 'px '+ -parseInt(_x * 4)+ 'px ' + '10px rgba(50,50,50,.3)';  //边框阴影效果
+          					obj.onmouseout=function(){
+          						var transform = "rotateX(" +0 + "deg) rotateY(" +0+ "deg)";  //变换效果
+          						obj.style.transition="all 2s";
+          						obj.style.transform = transform;
+          						obj.style.boxShadow = -parseInt(0) + 'px '+parseInt(2)+ 'px ' + '5px rgba(50,50,50,.3)';  //边框阴影效果
+          						
+          					}
+						}
+						
+					}
+				}
+				
+			}
+		</script>
+	</head>
+	<body>
+		<div class="v_box">
+			<div class="v_content" >
+				<img src="http://n1.itc.cn/img8/wb/smccloud/fetch/2015/05/07/180641312537237624.JPEG" style="width: 100%;" />
+			</div>
+		</div>
+	</body>
+</html>
